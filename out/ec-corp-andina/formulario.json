@@ -1,0 +1,29 @@
+{
+  "caso": "ec-corp-andina",
+  "estado": "pendiente_revision",
+  "fecha_generacion": "2026-11-02T00:41:04.522Z",
+  "campos_completados": [
+    {
+      "etiqueta": "Nombre de la empresa",
+      "claveInterna": "razon_social",
+      "valor": "Periferia IT Group S.A.S."
+    },
+    {
+      "etiqueta": "RUC",
+      "claveInterna": "nit",
+      "valor": "900123456"
+    },
+    {
+      "etiqueta": "Banco",
+      "claveInterna": "banco.nombre",
+      "valor": "Bancolombia S.A."
+    }
+  ],
+  "campos_faltantes": [],
+  "campos_con_confirmacion": [
+    {
+      "etiqueta": "RUC",
+      "motivo": "Foreign tax identifier"
+    }
+  ]
+}
