@@ -1,581 +1,561 @@
-Reto 01 – Agente Conversacional de Registro como Proveedor 
+# Reto 01 – Agente Conversacional de Registro como Proveedor
 
-1. Problema en una frase 
+# 1. Problema en una frase
 
-El proceso de registro como proveedor depende de actividades repetitivas, búsqueda manual de información, interpretación de formularios heterogéneos y preparación documental dispersa, generando riesgo operativo, dependencia de conocimiento tácito y tiempos de respuesta elevados. 
+El proceso actual de registro como proveedor depende de actividades manuales repetitivas, búsqueda descentralizada de información, interpretación de formatos heterogéneos y armado documental, generando retrasos, errores operativos y dependencia del conocimiento de personas específicas.
 
- 
+---
 
-2. Resumen Ejecutivo 
+# 2. Resumen Ejecutivo
 
-La solución propuesta implementa un agente conversacional basado en Agentic AI que automatiza la preparación del proceso de registro como proveedor, utilizando datos corporativos centralizados, reglas de negocio explícitas y validación humana antes de cualquier acción externa. 
+La solución implementa un agente conversacional basado en Agentic AI para automatizar el proceso de registro como proveedor.
 
-La solución se enfoca en: 
+El agente es capaz de:
 
-Reducir la transcripción manual. 
+- Interpretar solicitudes de clientes.
+- Identificar formatos y requisitos documentales.
+- Consultar información corporativa oficial.
+- Resolver campos mediante reglas de negocio.
+- Generar formularios.
+- Construir paquetes listos para revisión.
+- Requerir confirmación humana antes de cualquier acción final.
 
-Estandarizar el acceso a información corporativa. 
+La IA se utiliza como mecanismo de razonamiento y orquestación, mientras que las herramientas especializadas ejecutan la lógica de negocio y acceden a las fuentes autorizadas de información.
 
-Mejorar la trazabilidad. 
+---
 
-Reducir dependencia de conocimiento individual. 
+# 3. Problema de Negocio
 
-Aumentar la productividad administrativa. 
+Actualmente el proceso presenta cuatro problemas principales:
 
-Mantener control humano sobre decisiones críticas. 
+## Dependencia de personas
 
-La IA se utiliza como mecanismo de razonamiento y orquestación, mientras que las herramientas especializadas ejecutan la lógica de negocio y acceden a las fuentes autorizadas de información. 
+La ubicación de información y soportes depende del conocimiento individual.
 
- 
+## Retrabajo
 
-3. Arquitectura 
+Los mismos datos corporativos se buscan y transcriben repetidamente.
 
-Arquitectura de solución 
+## Riesgo operativo
 
-Usuario 
+Errores de digitación pueden afectar cuentas bancarias, identificaciones fiscales y datos corporativos.
 
-    ↓ 
+## Escalabilidad limitada
 
-Chat 
+El crecimiento del volumen incrementa linealmente el esfuerzo administrativo.
 
-    ↓ 
+---
 
-Agente IA 
+# 4. Arquitectura
 
-    ↓ 
+## Arquitectura Implementada
 
-Herramientas de Negocio 
+```text
+Usuario
+    ↓
+Chat / API
+    ↓
+Agent Orchestrator
+(GPT‑4o + Function Calling)
+    ↓
+Business Tools
+    • leerSolicitud()
+    • mapearCampos()
+    • generarFormulario()
+    • armarPaquete()
+    • simularEnvio()
+    ↓
+Enterprise Data & Document Repository
+    • maestro.json
+    • glosario-campos.json
+    • soportes
+    • solicitudes
+    ↓
+Business Artifacts
+    • formulario.json
+    • checklist.md
+    • borrador-correo.md
+    • ENVIO-SIMULADO.md
+    ↓
+Human Approval
+```
 
-    ↓ 
+## Experience Layer
 
-Repositorio Corporativo 
+Permite que la analista administrativa interactúe con el agente mediante una interfaz conversacional.
 
-    ↓ 
+## Agent Orchestration Layer
 
-Artefactos Generados 
+Implementada mediante GPT‑4o y Function Calling.
 
-    ↓ 
+Responsabilidades:
 
-Confirmación Humana 
+- Interpretar solicitudes.
+- Seleccionar herramientas.
+- Gestionar secuencias de acciones.
+- Coordinar el flujo de trabajo.
 
-Arquitectura técnica 
+El modelo no contiene datos empresariales ni reglas de negocio.
 
-React + Vite 
+## Business Services Layer
 
-        ↓ 
+Implementada mediante herramientas especializadas.
 
-Express API 
+### leerSolicitud()
 
-        ↓ 
+Obtiene:
 
-GPT‑4o 
+- Cliente.
+- País.
+- Formato solicitado.
+- Campos requeridos.
+- Soportes exigidos.
 
-        ↓ 
+### mapearCampos()
 
-Function Calling 
+Resuelve:
 
-        ↓ 
+```text
+Campo solicitado
+      ↓
+Glosario
+      ↓
+Campo maestro
+      ↓
+Valor
+```
 
-leerSolicitud() 
+Clasificando resultados en:
 
-mapearCampos() 
+- llenos
+- faltantes
+- requiere_confirmacion
 
-generarFormulario() 
+### generarFormulario()
 
-armarPaquete() 
+Construye una representación estructurada del formulario requerido por el cliente.
 
-simularEnvio() 
+### armarPaquete()
 
-        ↓ 
+Genera el paquete documental listo para revisión y firma.
 
-Repositorio Maestro 
+### simularEnvio()
 
-Separación de responsabilidades 
+Representa la validación final del flujo de negocio.
 
-Experience Layer 
+## Enterprise Data & Document Repository
 
-Responsable de la interacción con la analista administrativa. 
+Actúa como fuente única de verdad.
 
-AI Orchestration Layer 
+Fuentes utilizadas:
 
-Responsable del razonamiento y secuenciación de acciones. 
+- maestro.json
+- glosario-campos.json
+- repositorio de soportes
+- solicitudes de ejemplo
 
-Business Services Layer 
+## Governance Layer
 
-Responsable de ejecutar reglas de negocio. 
+La solución implementa:
 
-Enterprise Data Layer 
+- Human-in-the-Loop
+- Data Traceability
+- Separation of Reasoning and Execution
+- Source-of-Truth Enforcement
 
-Responsable de actuar como fuente única de verdad. 
+El modelo nunca inventa información corporativa.
 
-Governance Layer 
+Todos los valores utilizados provienen exclusivamente de fuentes autorizadas.
 
-Responsable de control, trazabilidad y cumplimiento. 
+---
 
- 
+# 5. Ciclo del Agente
 
-4. Ciclo del Agente 
+```text
+Solicitud Cliente
+      ↓
+leerSolicitud()
+      ↓
+mapearCampos()
+      ↓
+generarFormulario()
+      ↓
+armarPaquete()
+      ↓
+Confirmación Humana
+      ↓
+simularEnvio()
+```
 
-Usuario 
+Cada etapa produce artefactos auditables y reutilizables.
 
-    ↓ 
+---
 
-leerSolicitud() 
+# 6. Modelo Utilizado
 
-    ↓ 
+## GPT‑4o
 
-mapearCampos() 
+Razones:
 
-    ↓ 
+- Excelente soporte para Function Calling.
+- Buen equilibrio entre precisión y coste.
+- Alta capacidad para interpretar contexto de negocio.
+- Integración sencilla.
 
-generarFormulario() 
+## Rol
 
-    ↓ 
+Actúa como:
 
-armarPaquete() 
+```text
+Agent Orchestrator
+```
 
-    ↓ 
+No actúa como:
 
-Confirmación Humana 
+```text
+Fuente de datos
+Motor de negocio
+Repositorio documental
+```
 
-    ↓ 
+---
 
-simularEnvio() 
+# 7. Herramientas Implementadas
 
-El agente no genera información de negocio. 
+## leerSolicitud()
 
-Todos los valores utilizados provienen de: 
+Objetivo:
 
-maestro.json 
+Interpretar la solicitud del cliente.
 
-glosario-campos.json 
+Entrada:
 
-solicitud.json 
+- solicitud.json
+- plantilla-campos.json
+- plantilla-celdas.json
+- soportes-exigidos.json
 
-soportes-exigidos.json 
+Salida:
 
-El modelo únicamente coordina el flujo de trabajo. 
+```json
+{
+  "pais":"...",
+  "cliente":"...",
+  "formato":"...",
+  "campos":[...],
+  "soportes":[...]
+}
+```
 
- 
+## mapearCampos()
 
-5. Modelo Seleccionado 
+Objetivo:
 
-Modelo 
+Resolver información empresarial utilizando:
 
-GPT‑4o 
+- glosario-campos.json
+- maestro.json
 
-Razones 
+Salida:
 
-Buen desempeño en Function Calling. 
+```json
+{
+  "llenos":[...],
+  "faltantes":[...],
+  "requiere_confirmacion":[...]
+}
+```
 
-Buen equilibrio entre precisión y coste. 
+## generarFormulario()
 
-Capacidad para interpretar formularios heterogéneos. 
+Objetivo:
 
-Facilidad de integración. 
+Construir un formulario estructurado listo para revisión.
 
-Uso dentro de la arquitectura 
+Genera:
 
-GPT‑4o actúa como: 
+```text
+formulario.json
+```
 
-Razonador 
+Incluye:
 
-No actúa como: 
+- campos completos
+- campos faltantes
+- confirmaciones requeridas
+- estado
+- fecha de generación
 
-Fuente de verdad 
+## armarPaquete()
 
-ni como: 
+Objetivo:
 
-Motor de negocio 
+Preparar el paquete documental.
 
- 
+Genera:
 
-6. Herramientas Implementadas 
+```text
+paquete/
+```
 
-leerSolicitud() 
+Conteniendo:
 
-Responsabilidad: 
+- formulario.json
+- checklist.md
+- borrador-correo.md
+- soportes/
 
-Identificar cliente. 
+## simularEnvio()
 
-País. 
+Objetivo:
 
-Formato solicitado. 
+Representar la acción final del proceso.
 
-Campos requeridos. 
+Genera:
 
-Soportes requeridos. 
+```text
+ENVIO-SIMULADO.md
+```
 
-Entradas: 
+únicamente después de confirmación.
 
-solicitud.json 
+---
 
-plantilla-campos.json 
+# 8. Human‑in‑the‑Loop
 
-plantilla-celdas.json 
+La solución mantiene explícitamente al usuario dentro del proceso.
 
-soportes-exigidos.json 
+Ejemplos:
 
-Salidas: 
+- RUC
+- RTN
+- Información faltante
+- Confirmaciones previas al envío
 
-{ 
+La IA prepara la decisión.
 
-  "pais": "...", 
+El humano la aprueba.
 
-  "cliente": "...", 
+---
 
-  "formato": "...", 
+# 9. Estrategia para Portales Web
 
-  "campos": [...], 
+Aunque el reto no requiere implementación real, una solución productiva se apoyaría en:
 
-  "soportes": [...] 
+- Playwright
+- Selenium
+- Power Automate Desktop
+- UiPath
 
-} 
+Limitaciones:
 
- 
+- CAPTCHA
+- MFA
+- Cambios dinámicos de interfaz
 
-mapearCampos() 
+La autenticación y el envío final permanecerían bajo control humano.
 
-Responsabilidad: 
+---
 
-Resolver datos corporativos. 
+# 10. Decisiones y Trade-Offs
 
-Flujo: 
+## Decisión 1
 
-Campo Cliente 
+Uso de herramientas como única fuente de datos.
 
-      ↓ 
+Alternativa:
 
-Glosario 
+Permitir al LLM completar datos faltantes.
 
-      ↓ 
+Motivo:
 
-Campo Maestro 
+Reducir alucinaciones.
 
-      ↓ 
+## Decisión 2
 
-Valor 
+Mantener Human‑in‑the‑Loop.
 
-Clasificación: 
+Alternativa:
 
-llenos 
+Automatización completa.
 
-faltantes 
+Motivo:
 
-requiere_confirmacion 
+Preservar gobierno y control.
 
- 
+## Decisión 3
 
-generarFormulario() 
+Persistencia basada en archivos.
 
-Responsabilidad: 
+Alternativa:
 
-Construir una representación estructurada del formulario solicitado. 
+Base de datos.
 
-Genera: 
+Motivo:
 
-out/<caso>/formulario.json 
+Reducir complejidad para el alcance del reto.
 
-Incluye: 
+## Decisión 4
 
-campos completos 
+Separar razonamiento y ejecución.
 
-campos faltantes 
+Alternativa:
 
-campos con confirmación 
+Implementar lógica dentro del prompt.
 
-fecha de generación 
+Motivo:
 
-estado 
+Mejor trazabilidad y mantenibilidad.
 
- 
+---
 
-armarPaquete() 
+# 11. Supuestos
 
-Responsabilidad: 
+- Los datos maestros están actualizados.
+- Los documentos representan versiones oficiales.
+- Las plantillas incluidas son representativas.
+- La firma electrónica está fuera del alcance.
 
-Construir el paquete documental. 
+---
 
-Genera: 
+# 12. Riesgos
 
-out/<caso>/paquete/ 
+## Calidad de Datos
 
-Contenido: 
+Mitigación:
 
-formulario.json 
+- Ownership.
+- Data Stewardship.
 
-checklist.md 
+## Hallucinations
 
-borrador-correo.md 
+Mitigación:
 
-soportes/ 
+- Function Calling.
+- Herramientas como única fuente de verdad.
 
- 
+## Escalabilidad
 
-simularEnvio() 
+Mitigación:
 
-Responsabilidad: 
+- Procesamiento asíncrono.
+- Arquitectura desacoplada.
 
-Representar la acción externa sin ejecutarla. 
+## Gestión Documental
 
-Genera: 
+Mitigación:
 
-ENVIO-SIMULADO.md 
+- Checklist.
+- Control documental.
+- Validación de evidencias.
 
-solo después de confirmación explícita. 
+## Automatización sin Supervisión
 
- 
+Mitigación:
 
-7. Estrategia para Portales Web 
+- Human‑in‑the‑Loop.
+- Confirmación explícita.
 
-El reto no requiere integración real. 
+---
 
-Para producción propondría: 
+# 13. Cobertura
 
-Automatización 
+| Historia | Estado |
+|-----------|--------|
+| HU‑1 Leer Solicitud | Hecho |
+| HU‑2 Mapear Campos | Hecho |
+| HU‑3 Generar Formulario | Hecho |
+| HU‑4 Armar Paquete | Hecho |
+| HU‑5 Confirmación y Envío Simulado | Hecho |
 
-Playwright 
+---
 
-Selenium 
+# 14. Uso de IA
 
-Power Automate Desktop 
+Herramientas utilizadas:
 
-UiPath 
+- ChatGPT
+- GitHub Copilot
 
-Control humano 
+Aplicaciones:
 
-El agente: 
+- Diseño arquitectónico.
+- Refactorización.
+- Tipado TypeScript.
+- Revisión de calidad.
+- Documentación.
 
-prepara información. 
+Las propuestas fueron revisadas y adaptadas antes de incorporarlas.
 
-valida campos. 
+---
 
-El humano: 
+# 15. Limitaciones del Prototipo y Evolución hacia un Agente Autónomo
 
-ingresa credenciales. 
+La implementación actual valida completamente la lógica de negocio mediante una ejecución determinística:
 
-resuelve MFA. 
+```text
+leerSolicitud()
+      ↓
+mapearCampos()
+      ↓
+generarFormulario()
+      ↓
+armarPaquete()
+      ↓
+simularEnvio()
+```
 
-confirma envío. 
+Este enfoque se adoptó deliberadamente para garantizar:
 
- 
+- reproducibilidad,
+- trazabilidad,
+- pruebas independientes del modelo,
+- aislamiento de la lógica de negocio.
 
-8. Human‑in‑the‑Loop 
+La capacidad de Agentic AI ya está parcialmente implementada mediante GPT‑4o y Function Calling, aunque la orquestación autónoma completa del flujo aún no ha sido desarrollada.
 
-Se implementa un punto de control explícito antes de cualquier acción externa. 
+## Arquitectura Objetivo
 
-La filosofía es: 
+```text
+Usuario
+    ↓
+GPT‑4o
+    ↓
+leerSolicitud()
+    ↓
+GPT‑4o
+    ↓
+mapearCampos()
+    ↓
+GPT‑4o
+    ↓
+generarFormulario()
+    ↓
+GPT‑4o
+    ↓
+armarPaquete()
+    ↓
+GPT‑4o
+    ↓
+Confirmación Humana
+    ↓
+simularEnvio()
+```
 
-La IA prepara. 
+En una versión productiva, GPT actuaría como un verdadero orquestador dinámico del flujo.
 
-El humano decide. 
+---
 
-Razones: 
+# 16. Visión de Producción
 
-Cumplimiento. 
+Los mayores desafíos para una implementación empresarial no son tecnológicos:
 
-Gobierno. 
+- Gobierno de datos.
+- Gobierno de IA.
+- Gestión documental.
+- Seguridad.
+- Ownership del proceso.
+- Gestión del cambio.
+- Escalabilidad operacional.
 
-Responsabilidad. 
-
-Prevención de errores. 
-
- 
-
-9. Decisiones y Trade-Offs 
-
-Decisión 1 
-
-Herramientas como única fuente de verdad. 
-
-Alternativa 
-
-Permitir al LLM completar información faltante. 
-
-Motivo 
-
-Reducción de alucinaciones. 
-
- 
-
-Decisión 2 
-
-Human‑in‑the‑Loop obligatorio. 
-
-Alternativa 
-
-Automatización completa. 
-
-Motivo 
-
-Preservar control y trazabilidad. 
-
- 
-
-Decisión 3 
-
-Persistencia basada en archivos. 
-
-Alternativa 
-
-Base de datos relacional. 
-
-Motivo 
-
-Menor complejidad para el alcance del reto. 
-
- 
-
-Decisión 4 
-
-Separación estricta entre razonamiento y ejecución. 
-
-Alternativa 
-
-Implementar reglas dentro del prompt. 
-
-Motivo 
-
-Mayor mantenibilidad y auditabilidad. 
-
- 
-
-10. Supuestos 
-
-Los datos maestros están actualizados. 
-
-Los soportes representan la documentación oficial. 
-
-Los formularios de ejemplo representan escenarios reales. 
-
-La firma electrónica está fuera del alcance. 
-
-Los datos contenidos en los fixtures son consistentes. 
-
- 
-
-11. Riesgos 
-
-Riesgo 1 — Calidad de Datos 
-
-Datos incorrectos en el maestro producirán formularios incorrectos. 
-
-Mitigación 
-
-Gobierno del dato y Data Steward. 
-
- 
-
-Riesgo 2 — Hallucinations 
-
-El modelo podría intentar inferir valores faltantes. 
-
-Mitigación 
-
-Function Calling y herramientas como única fuente de datos. 
-
- 
-
-Riesgo 3 — Dependencia de IA 
-
-El flujo podría depender excesivamente del modelo. 
-
-Mitigación 
-
-Reglas de negocio implementadas en herramientas. 
-
- 
-
-Riesgo 4 — Gestión documental 
-
-Documentos vencidos o incompletos. 
-
-Mitigación 
-
-Checklist y validaciones automáticas. 
-
- 
-
-Riesgo 5 — Automatización sin supervisión 
-
-Acciones externas ejecutadas incorrectamente. 
-
-Mitigación 
-
-Human‑in‑the‑Loop. 
-
- 
-
-12. Cobertura 
-
-Historia 
-
-Estado 
-
-HU‑1 Leer Solicitud 
-
-Hecho 
-
-HU‑2 Mapear Campos 
-
-Hecho 
-
-HU‑3 Generar Formulario 
-
-Hecho 
-
-HU‑4 Armar Paquete 
-
-Hecho 
-
-HU‑5 Confirmación y Envío Simulado 
-
-Hecho 
-
- 
-
-13. Uso de IA 
-
-Herramientas utilizadas: 
-
-ChatGPT 
-
-GitHub Copilot 
-
-Aplicaciones: 
-
-Diseño de arquitectura. 
-
-Refactorización. 
-
-Tipado TypeScript. 
-
-Revisión de calidad. 
-
-Documentación. 
-
-Las propuestas generadas por IA fueron revisadas, adaptadas y validadas antes de su incorporación. 
-
- 
-
-14. Visión de Producción 
-
-La tecnología no es el principal desafío. 
-
-Las principales brechas para una implementación empresarial son: 
-
-Gobierno de datos. 
-
-Gobierno de IA. 
-
-Gestión documental. 
-
-Seguridad. 
-
-Ownership del proceso. 
-
-Gestión del cambio. 
-
-Escalabilidad operacional. 
-
-La solución propuesta demuestra cómo la IA puede transformar el proceso de registro como proveedor mediante un modelo operativo más escalable, trazable y resiliente, reduciendo actividades manuales y preservando los controles necesarios para un entorno empresarial de producción. 
+La solución demuestra cómo un patrón Agentic AI puede transformar un proceso administrativo altamente manual en una capacidad empresarial escalable, trazable y gobernada, reduciendo dependencia de conocimiento individual y mejorando significativamente la productividad operativa.
